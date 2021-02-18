@@ -16,15 +16,87 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		$(function () {
 
 			//页面加载完毕后，让用户的文本框自动获得焦点
-			$("#LoginAct").focus();
+			$("#loginAct").focus();
 
 			$("#submitBtn").click(function () {
 
-				alert(123);
+				login();
+
+			})
+
+			//为当前登录页面窗口绑定敲键盘事件
+			//event:这个参数可以取得我们敲的是哪个键
+			$(window).keydown(function (event) {
+
+				//alert(event.keyCode);
+
+				//如果取得的键位值为13，表示敲的是回车键
+				if(event.keyCode==13){
+
+					login();
+
+				}
 
 			})
 
 		})
+		
+		function login() {
+
+			//alert("登录操作");
+			//验证账号密码不能为空
+			//取得账号密码
+			//将文本中的左右空格去掉，使用$.trim(文本)
+			var loginAct = $.trim($("#loginAct").val());
+			var loginPwd = $.trim($("#loginPwd").val());
+
+			if(loginAct == "" || loginPwd == ""){
+
+				$("#msg").html("账号密码不能为空");
+
+				//如果账号密码为空，则需要及时强制终止该方法
+				return false;
+
+			}
+
+			$.ajax({
+
+				url : "settings/user/login.do",
+				data : {
+
+					"loginAct" : loginAct,
+					"loginPwd" : loginPwd
+
+				},
+				type : "post",
+				dataType : "json",
+				success : function (data) {
+
+					//data需要
+					// 1.登录结果（成功或者失败） success : true/false
+					// 2.失败的原因  msg : "原因"
+
+					//如果登录成功
+					if(data.success(){
+
+						window.location.href = "workbench/index.html";
+
+					}
+					//如果登录失败
+					else {
+
+						$("#msg").html(data.msg);
+
+					})
+
+
+				}
+
+			})
+
+
+		}
+		
 
 	</script>
 </head>
@@ -44,14 +116,14 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			<form action="workbench/index.html" class="form-horizontal" role="form">
 				<div class="form-group form-group-lg">
 					<div style="width: 350px;">
-						<input class="form-control" type="text" placeholder="用户名" id="LoginAct">
+						<input class="form-control" type="text" placeholder="用户名" id="loginAct">
 					</div>
 					<div style="width: 350px; position: relative;top: 20px;">
-						<input class="form-control" type="password" placeholder="密码" id="LoginPwd">
+						<input class="form-control" type="password" placeholder="密码" id="loginPwd">
 					</div>
 					<div class="checkbox"  style="position: relative;top: 30px; left: 10px;">
 						
-							<span id="msg"></span>
+							<span id="msg" style="color: red">test</span>
 						
 					</div>
 					<!--

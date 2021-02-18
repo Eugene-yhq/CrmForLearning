@@ -14,8 +14,22 @@
 <head>
     <base href="<%=basePath%>">
     <title>Title</title>
+    偷懒贴模板代码用
 </head>
 <body>
 
+$.ajax({
+
+url : "",
+data : {
+
+},
+type : "",
+dataType : "json",
+success : function (data) {
+
+}
+
+})
 </body>
 </html>
