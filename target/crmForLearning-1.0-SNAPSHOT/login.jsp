@@ -77,7 +77,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					// 2.失败的原因  msg : "原因"
 
 					//如果登录成功
-					if(data.success(){
+					if(data.success){
 
 						window.location.href = "workbench/index.html";
 
@@ -87,7 +87,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 						$("#msg").html(data.msg);
 
-					})
+					}
 
 
 				}

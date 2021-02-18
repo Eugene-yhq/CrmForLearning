@@ -55,13 +55,13 @@ public class UserController extends HttpServlet {
 
             User user = us.login(loginAct,loginPwd,ip);
 
-            request.getSession().setAttribute("user", user);
+            request.getSession().setAttribute("user",user);
 
             //如果程序执行到此处，说明业务层没有为controller抛出任何异常
             //表示登陆成功，只需要返回success为true
             //利用工具类PrintJson
             //返回flag的方法
-            PrintJson.printJsonFlag(response, true);
+            PrintJson.printJsonFlag(response,true);
 
         }catch (Exception e){
 
