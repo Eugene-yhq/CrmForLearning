@@ -15,6 +15,14 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 		$(function () {
 
+			//在点击市场活动之后，服务器重启的话，再次点击市场活动
+			//会导致在小窗口中刷新出login.jsp
+			if(window.top!=window){//这段代码作用是，当页面不是顶层窗口时，将页面设置为顶层窗口，不会维持小窗口状态
+
+				window.top.location = window.location;
+
+			}
+
 			//页面加载完毕后，让用户的文本框自动获得焦点
 			$("#loginAct").focus();
 
