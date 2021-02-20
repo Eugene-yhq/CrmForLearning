@@ -39,7 +39,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				dataType : "json",
 				success : function (data) {
 
-					var html = "<option></option>";
+					var html = "<option disabled>------</option>";
 
 					//遍历出来的每一个n，就是每一个user对象
 					$.each(data,function (i,n) {
@@ -49,6 +49,9 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					})
 
 					$("#create-marketActivityOwner").html(html);
+
+					var id = "${user.id}";
+					$("#create-marketActivityOwner").val(id);
 
 					//所有者下拉框过完后台
 					//展现模态窗口
