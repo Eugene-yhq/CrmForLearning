@@ -30,8 +30,34 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					需要操作的模态窗口的jquery对象，调用modal方法，为该方法传递参数  show:显示窗口  hide：隐藏窗口
 
 			 */
+			// $("#createActivityModal").modal("show");
 
-			$("#createActivityModal").modal("show");
+			$.ajax({
+
+				url : "workbench/activity/getUserList.do",
+				type : "get",
+				dataType : "json",
+				success : function (data) {
+
+					var html = "<option></option>";
+
+					//遍历出来的每一个n，就是每一个user对象
+					$.each(data,function (i,n) {
+
+						html += "<option value='"+n.id+"'>"+n.name+"</option>";
+
+					})
+
+					$("#create-marketActivityOwner").html(html);
+
+					//所有者下拉框过完后台
+					//展现模态窗口
+
+					$("#createActivityModal").modal("show");
+				}
+
+			})
+
 
 		})
 		
@@ -59,9 +85,9 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 							<label for="create-marketActivityOwner" class="col-sm-2 control-label">所有者<span style="font-size: 15px; color: red;">*</span></label>
 							<div class="col-sm-10" style="width: 300px;">
 								<select class="form-control" id="create-marketActivityOwner">
-								  <option>zhangsan</option>
-								  <option>lisi</option>
-								  <option>wangwu</option>
+<%--								  <option>zhangsan</option>--%>
+<%--								  <option>lisi</option>--%>
+<%--								  <option>wangwu</option>--%>
 								</select>
 							</div>
                             <label for="create-marketActivityName" class="col-sm-2 control-label">名称<span style="font-size: 15px; color: red;">*</span></label>
