@@ -3,11 +3,11 @@ package com.demo.crm.workbench.web.controller;
 import com.demo.crm.settings.domain.User;
 import com.demo.crm.settings.service.UserService;
 import com.demo.crm.settings.service.impl.UserServiceImpl;
-import com.demo.crm.utils.MD5Util;
-import com.demo.crm.utils.PrintJson;
-import com.demo.crm.utils.ServiceFactory;
-import com.demo.crm.utils.SqlSessionUtil;
+import com.demo.crm.utils.*;
 import com.demo.crm.workbench.dao.ActivityDao;
+import com.demo.crm.workbench.domain.Activity;
+import com.demo.crm.workbench.service.ActivityService;
+import com.demo.crm.workbench.service.impl.ActivityServiceImpl;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -31,11 +31,47 @@ public class ActivityController extends HttpServlet {
             
             getUserList(request,response);
 
-        }else if("/workbench/activity/xxx.do".equals(path)){
+        }else if("/workbench/activity/save.do".equals(path)){
 
-            //xxx(request,response);
+            save(request,response);
 
         }
+
+    }
+
+    private void save(HttpServletRequest request, HttpServletResponse response) {
+
+        System.out.println("执行市场活动的添加操作");
+
+        String id = UUIDUtil.getUUID();
+        String owner = request.getParameter("owner");
+        String name = request.getParameter("name");
+        String startDate = request.getParameter("startDate");
+        String endDate = request.getParameter("endDate");
+        String cost = request.getParameter("cost");
+        String description = request.getParameter("description");
+
+        //创建时间为当前系统时间
+        String createTime = DateTimeUtil.getSysTime();
+        //创建人为当前用户
+        String createBy = ((User) request.getSession().getAttribute("user")).getName();
+
+        ActivityService as = (ActivityService) ServiceFactory.getService(new ActivityServiceImpl());
+
+        Activity activity = new Activity();
+        activity.setCost(cost);
+        activity.setStartDate(startDate);
+        activity.setOwner(owner);
+        activity.setName(name);
+        activity.setId(id);
+        activity.setEndDate(endDate);
+        activity.setDescription(description);
+        activity.setCreateTime(createTime);
+        activity.setCreateBy(createBy);
+
+        boolean flag = as.save(activity);
+
+        PrintJson.printJsonFlag(response, flag);
 
     }
 

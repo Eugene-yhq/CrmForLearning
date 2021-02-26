@@ -70,6 +70,49 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 			})
 
+			//为保存按钮绑定事件，执行添加操作
+			$("#saveBtn").click(function () {
+
+				$.ajax({
+
+					url : "workbench/activity/save.do",
+					data : {
+
+						"owner" : $.trim($("#create-marketActivityOwner").val()),
+						"name" : $.trim($("#create-marketActivityName").val()),
+						"startDate" : $.trim($("#create-startTime").val()),
+						"endDate" : $.trim($("#create-endTime").val()),
+						"cost" : $.trim($("#create-cost").val()),
+						"description" : $.trim($("#create-describe").val()),
+
+					},//发送到后台的参数放这里
+					type: "post",
+					dataType: "json",
+					success : function (data) {
+
+						/*
+
+							data
+								{“success”:true/false}
+
+						 */
+
+						if(data.success){
+
+							//添加成功后
+							//刷新生死场活动信息列表
+
+							//关闭添加操作的模态窗口
+							$("#createActivityModal").modal("hide");
+
+						}
+
+					}
+
+				})
+
+			})
+
 
 		})
 		
@@ -111,11 +154,11 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 						<div class="form-group">
 							<label for="create-startTime" class="col-sm-2 control-label">开始日期</label>
 							<div class="col-sm-10" style="width: 300px;">
-								<input type="text" class="form-control time" id="create-startTime">
+								<input type="text" class="form-control time" id="create-startTime" readonly>
 							</div>
 							<label for="create-endTime" class="col-sm-2 control-label">结束日期</label>
 							<div class="col-sm-10" style="width: 300px;">
-								<input type="text" class="form-control time" id="create-endTime">
+								<input type="text" class="form-control time" id="create-endTime" readonly>
 							</div>
 						</div>
                         <div class="form-group">
@@ -136,8 +179,16 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					
 				</div>
 				<div class="modal-footer">
+
+					<!--
+
+						data-dismiss="modal"
+							表示关闭模态窗口
+
+					-->
+
 					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-					<button type="button" class="btn btn-primary" data-dismiss="modal">保存</button>
+					<button type="button" class="btn btn-primary" id="saveBtn">保存</button>
 				</div>
 			</div>
 		</div>

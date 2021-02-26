@@ -10,4 +10,19 @@ public class ActivityServiceImpl implements ActivityService {
 
     private ActivityDao activityDao = SqlSessionUtil.getSqlSession().getMapper(ActivityDao.class);
 
+    @Override
+    public boolean save(Activity activity) {
+
+        boolean flag = true;
+
+        int count = activityDao.save(activity);
+
+        if(count!=1){
+
+            flag = false;
+
+        }
+
+        return flag;
+    }
 }
