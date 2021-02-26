@@ -4,6 +4,7 @@ import com.demo.crm.settings.domain.User;
 import com.demo.crm.settings.service.UserService;
 import com.demo.crm.settings.service.impl.UserServiceImpl;
 import com.demo.crm.utils.*;
+import com.demo.crm.vo.PaginationVO;
 import com.demo.crm.workbench.dao.ActivityDao;
 import com.demo.crm.workbench.domain.Activity;
 import com.demo.crm.workbench.service.ActivityService;
@@ -51,8 +52,52 @@ public class ActivityController extends HttpServlet {
         String owner = request.getParameter("owner");
         String startDate = request.getParameter("startDate");
         String endDate = request.getParameter("endDate");
-        String pageNo = request.getParameter("pageNo");
-        String pageSize = request.getParameter("pageSize");
+        String pageNoStr = request.getParameter("pageNo");
+        int pageNo = Integer.valueOf(pageNoStr);
+        //每页展现的记录数
+        String pageSizeStr = request.getParameter("pageSize");
+        int pageSize = Integer.valueOf(pageSizeStr);
+        //计算出掠过的记录数
+        int skipCount = (pageNo - 1) * pageSize;
+
+        Map<String,Object> map = new HashMap<String,Object>();
+        map.put("name",name);
+        map.put("owner",owner);
+        map.put("startDate",startDate);
+        map.put("endDate",endDate);
+        map.put("skipCount",skipCount);
+        map.put("pageSize",pageSize);
+
+        ActivityService as = (ActivityService) ServiceFactory.getService(new ActivityServiceImpl());
+
+        /*
+
+            前端要：市场活动信息列表和查询的总条数
+
+            业务层拿到以上两项信息之后，如果做返回
+            有两种形式
+            map
+            map.put("dataList":dataList)
+            map.put("total":total)
+            PrintJSON map --> json
+            {"total":100,"dataList":[{市场活动1}{2}{3}]}
+
+            vo
+            Pagination<T>
+                private int total;
+                private List<T> dataList;
+
+            paginationVO<Activity> vo = new PaginationVO<>;
+            vo.setTotal(total);
+            vo.setDataList(dataList);
+            PrintJSON vo -->json
+            {"total":100,"dataList":[{市场活动1}{2}{3}]}
+
+         */
+        PaginationVO<Activity> vo = as.pageList(map);
+
+        PrintJson.printJsonObj(response, vo);
+
 
     }
 
