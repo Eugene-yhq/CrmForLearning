@@ -94,6 +94,7 @@ public class ActivityController extends HttpServlet {
             {"total":100,"dataList":[{市场活动1}{2}{3}]}
 
          */
+
         PaginationVO<Activity> vo = as.pageList(map);
 
         PrintJson.printJsonObj(response, vo);

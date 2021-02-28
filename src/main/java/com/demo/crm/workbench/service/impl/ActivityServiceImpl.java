@@ -30,14 +30,13 @@ public class ActivityServiceImpl implements ActivityService {
         return flag;
     }
 
-    @Override
     public PaginationVO<Activity> pageList(Map<String, Object> map) {
 
         //取得total
         int total = activityDao.getTotalByCondition(map);
 
         //取得dataList
-        List<Activity> dataList = activityDao.getActivityListByCondition();
+        List<Activity> dataList = activityDao.getActivityListByCondition(map);
 
         //将total和dataList封装到vo中
         PaginationVO<Activity> vo = new PaginationVO<Activity>();

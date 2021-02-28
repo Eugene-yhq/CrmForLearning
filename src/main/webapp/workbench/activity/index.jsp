@@ -83,7 +83,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 						"startDate" : $.trim($("#create-startTime").val()),
 						"endDate" : $.trim($("#create-endTime").val()),
 						"cost" : $.trim($("#create-cost").val()),
-						"description" : $.trim($("#create-describe").val()),
+						"description" : $.trim($("#create-describe").val())
 
 					},//发送到后台的参数放这里
 					type: "post",
@@ -100,7 +100,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 						if(data.success){
 
 							//添加成功后
-							//刷新生死场活动信息列表
+							//刷新市场活动信息列表
 
 							//清空添加操作模态窗口中的数据
 
@@ -132,13 +132,18 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 			})
 
-
 		})
+
 
 		//页面加载完毕后触发一个方法
 		pageList(1,2);
 
 		//为查询按钮绑定事件，触发pageList()方法
+		$("#searchBtn").click(function () {
+
+			pageList(1,2);
+
+		})
 		
 	});
 
@@ -383,7 +388,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				    </div>
 				  </div>
 				  
-				  <button type="button" id="seachBtn" class="btn btn-default">查询</button>
+				  <button type="button" id="searchBtn" class="btn btn-default">查询</button>
 				  
 				</form>
 			</div>

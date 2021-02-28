@@ -3,9 +3,13 @@ package com.demo.crm.workbench.dao;
 import com.demo.crm.workbench.domain.Activity;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ActivityDao {
     int save(Activity activity);
 
-    List<Activity> getActivityListByCondition();
+
+    int getTotalByCondition(Map<String, Object> map);
+
+    List<Activity> getActivityListByCondition(Map<String, Object> map);
 }
