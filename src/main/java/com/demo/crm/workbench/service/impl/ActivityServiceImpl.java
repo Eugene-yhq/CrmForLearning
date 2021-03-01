@@ -47,4 +47,11 @@ public class ActivityServiceImpl implements ActivityService {
 
         return vo;
     }
+
+    @Override
+    public boolean delete(String[] ids) {
+
+
+        return false;
+    }
 }
