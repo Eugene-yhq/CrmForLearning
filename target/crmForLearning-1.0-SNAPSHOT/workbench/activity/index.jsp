@@ -196,8 +196,55 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 			}else {
 
+				//加一个确定删除选项
+				if(confirm("确定删除所选中的记录吗？")){
+
+					//拼接参数
+					var param = "";
+
+					//将$xuanze中的每一个dom对象遍历出来，取其value值，就相当于取得了需要删除的记录的id
+					for(var i=0;i<$xuanze.length;i++){
+
+						param += "id="+$($xuanze[i]).val();
+
+						//如果不是最后一个元素，需要在后面追加一个&符
+						if(i<$xuanze.length-1){
+
+							param += "&";
+
+						}
+
+					}
+
+					//url:workbench/activity/delete.do?id=xxx&id=xxx
+					$.ajax({
+
+						url : "workbench/activity/delete.do",
+						data : param,
+						type : "post",
+						dataType : "json",
+						success : function (data) {
+
+							//需要后台返回结果为true/false
+							if(data.success){
+
+								pageList(1,2);
+
+							}else {
+
+								alert("删除记录失败");
+
+							}
+
+						}
+
+
+					})
+
+				}
+
 				//选了记录，可以是1条或多条
-				alert("deleting");
+				// alert("deleting");
 
 			}
 
@@ -207,6 +254,9 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 	});
 
 	function pageList(pageNo,pageSize) {
+
+		//将全选的复选框的勾取消
+		$("#quanxuan").prop("checked",false);
 
 		//查询前，将隐藏域中保存的信息取出来，重新赋予到搜索框中
 		$("#search-owner").val($.trim($("#hidden-owner").val()));
