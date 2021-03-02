@@ -7,6 +7,7 @@ import com.demo.crm.utils.*;
 import com.demo.crm.vo.PaginationVO;
 import com.demo.crm.workbench.dao.ActivityDao;
 import com.demo.crm.workbench.domain.Activity;
+import com.demo.crm.workbench.domain.ActivityRemark;
 import com.demo.crm.workbench.service.ActivityService;
 import com.demo.crm.workbench.service.impl.ActivityServiceImpl;
 
@@ -44,7 +45,25 @@ public class ActivityController extends HttpServlet {
 
             delete(request,response);
 
+        }else if("/workbench/activity/getUserListAndActivity.do".equals(path)){
+
+            getUserListAndActivity(request,response);
+
         }
+
+    }
+
+    private void getUserListAndActivity(HttpServletRequest request, HttpServletResponse response) {
+
+        System.out.println("进入到查询用户信息列表和根据市场活动id查询单条记录的操作");
+
+        String id = request.getParameter("id");
+
+        ActivityService as = (ActivityService) ServiceFactory.getService(new ActivityServiceImpl());
+
+        Map<String,Object> map = as.getUserListAndActivity(id);
+
+        PrintJson.printJsonObj(response, map);
 
     }
 
