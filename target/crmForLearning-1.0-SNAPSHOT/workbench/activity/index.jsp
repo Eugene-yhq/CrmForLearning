@@ -106,6 +106,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 							//添加成功后
 							//刷新市场活动信息列表
+                            pageList(1,3);
 
 							//清空添加操作模态窗口中的数据
 
@@ -141,7 +142,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 
 		//页面加载完毕后触发一个方法
-		pageList(1,2);
+		pageList(1,3);
 
 		//为查询按钮绑定事件，触发pageList()方法
 		$("#searchBtn").click(function () {
@@ -157,7 +158,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			$("#hidden-startDate").val($.trim($("#search-startTime").val()));
 			$("#hidden-endDate").val($.trim($("#search-endTime").val()));
 
-			pageList(1,2);
+			pageList(1,3);
 
 		})
 
@@ -302,6 +303,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 						$("#edit-describe").val(data.activity.description);
 
 						//所有的值都填写好之后，打开修改操作的模态窗口
+						
 						$("#editActivityModal").modal("show");
 
 					}
@@ -312,6 +314,55 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			}
 
 		})
+
+        //为更新按钮绑定事件，执行市场活动的修改操作
+        $("#updateBtn").click(function () {
+
+            $.ajax({
+
+                url : "workbench/activity/update.do",
+                data : {
+
+                    "id" : $.trim($("#edit-id").val()),
+                    "owner" : $.trim($("#edit-marketActivityOwner").val()),
+                    "name" : $.trim($("#edit-marketActivityName").val()),
+                    "startDate" : $.trim($("#edit-startTime").val()),
+                    "endDate" : $.trim($("#edit-endTime").val()),
+                    "cost" : $.trim($("#edit-cost").val()),
+                    "description" : $.trim($("#edit-describe").val())
+
+                },//发送到后台的参数放这里
+                type: "post",
+                dataType: "json",
+                success : function (data) {
+
+                    /*
+
+                        data
+                            {“success”:true/false}
+
+                     */
+
+                    if(data.success){
+
+                        //修改成功后
+                        //刷新市场活动信息列表
+                        pageList(1,3);
+
+                        //关闭修改操作的模态窗口
+                        $("#editActivityModal").modal("hide");
+
+                    }else {
+
+                        alert("修改市场活动失败");
+
+                    }
+
+                }
+
+            })
+
+        })
 
 		
 	});
