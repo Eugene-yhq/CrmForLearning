@@ -5,6 +5,14 @@
 
 <mapper namespace="com.demo.crm.workbench.dao.ActivityRemarkDao">
 	
+    <update id="updateRemark">
+
+        update tbl_activity_remark set noteContent=#{noteContent},editBy=#{editBy},editTime=#{editTime},editFlag=#{editFlag}
+
+        where id=#{id}
+
+    </update>
+
     <insert id="saveRemark">
 
         insert into tbl_activity_remark(
