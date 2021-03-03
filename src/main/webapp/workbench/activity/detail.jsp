@@ -53,7 +53,63 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		});
 
 		showRemarkList();
-	});
+
+        $("#remarkBody").on("mouseover",".remarkDiv",function(){
+            $(this).children("div").children("div").show();
+        })
+        $("#remarkBody").on("mouseout",".remarkDiv",function(){
+            $(this).children("div").children("div").hide();
+        })
+
+        $("#saveRemarkBtn").click(function () {
+
+            $.ajax({
+
+                url : "workbench/activity/saveRemark.do",
+                data : {
+
+                    "noteContent" : $.trim($("#remark").val()),
+                    "activityId" : "${activity.id}"
+
+                },
+                type : "post",
+                dataType : "json",
+                success : function (data) {
+
+                    if(data.success){
+
+                        $("#remark").val("");
+
+                        //添加成功后，在textarea文本域上方新增一个div
+                        var html = "";
+
+                        html += '<div id="'+data.ar.id+'" class="remarkDiv" style="height: 60px;">';
+                        html += '<img title="zhangsan" src="image/user-thumbnail.png" style="width: 30px; height:30px;">';
+                        html += '<div style="position: relative; top: -40px; left: 40px;" >';
+                        html += '<h5>'+data.ar.noteContent+'</h5>';
+                        html += '<font color="gray">市场活动</font> <font color="gray">-</font> <b>${activity.name}</b> <small style="color: gray;"> '+data.ar.createTime+' 由'+data.ar.createBy+'</small>';
+                        html += '<div style="position: relative; left: 500px; top: -30px; height: 30px; width: 100px; display: none;">';
+                        html += '<a class="myHref" href="javascript:void(0);"><span class="glyphicon glyphicon-edit" style="font-size: 20px; color: #FF0000;"></span></a>';
+                        html += '&nbsp;&nbsp;&nbsp;&nbsp;';
+                        html += '<a class="myHref" href="javascript:void(0);" onclick="deleteRemark(\''+data.ar.id+'\')"><span class="glyphicon glyphicon-remove" style="font-size: 20px; color: #FF0000;"></span></a>';
+                        html += '</div>';
+                        html += '</div>';
+                        html += '</div>';
+                        $("#remarkDiv").before(html);
+
+                    }else {
+
+                        alert("添加备注失败");
+
+                    }
+
+                }
+
+            })
+
+        })
+
+    });
 
 	function showRemarkList() {
 
@@ -73,20 +129,21 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 				$.each(data,function (i,n) {
 
-				    html += '<div class="remarkDiv" style="height: 60px;">';
+				    html += '<div id="'+n.id+'" class="remarkDiv" style="height: 60px;">';
 					html += '<img title="zhangsan" src="image/user-thumbnail.png" style="width: 30px; height:30px;">';
 					html += '<div style="position: relative; top: -40px; left: 40px;" >';
 					html += '<h5>'+n.noteContent+'</h5>';
 					html += '<font color="gray">市场活动</font> <font color="gray">-</font> <b>${activity.name}</b> <small style="color: gray;"> '+(n.editFlag==0?n.createTime:n.editTime)+' 由'+(n.editFlag==0?n.createBy:n.editBy)+'</small>';
 					html += '<div style="position: relative; left: 500px; top: -30px; height: 30px; width: 100px; display: none;">';
-					html += '<a class="myHref" href="javascript:void(0);"><span class="glyphicon glyphicon-edit" style="font-size: 20px; color: #E6E6E6;"></span></a>';
+					html += '<a class="myHref" href="javascript:void(0);"><span class="glyphicon glyphicon-edit" style="font-size: 20px; color: #FF0000;"></span></a>';
 					html += '&nbsp;&nbsp;&nbsp;&nbsp;';
-				    html += '<a class="myHref" href="javascript:void(0);"><span class="glyphicon glyphicon-remove" style="font-size: 20px; color: #E6E6E6;"></span></a>';
+				    html += '<a class="myHref" href="javascript:void(0);" onclick="deleteRemark(\''+n.id+'\')"><span class="glyphicon glyphicon-remove" style="font-size: 20px; color: #FF0000;"></span></a>';
 					html += '</div>';
 					html += '</div>';
 					html += '</div>';
 
-				})
+				})//动态拼接的html中要触发onclick，参数必须嵌套在字符串中
+
                 //这里可以在div中新建一个div标签，并命一个id再选择，使用val()方法
                 //本次使用before()方法对大的div进行从下往上的添加
                 $("#remarkDiv").before(html);
@@ -96,6 +153,39 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		})
 
 	}
+
+    function deleteRemark(id) {
+
+        //alert("123")
+        $.ajax({
+
+            url: "workbench/activity/deleteRemark.do",
+            data : {
+
+                "id" : id
+
+            },
+            type: "post",
+            dataType: "json",
+            success : function (data) {
+
+                if(data.success){
+
+                    //删除成功
+                    alert("删除备注成功");
+                    $("#"+id).remove();
+
+                }else{
+
+                    alert("删除备注失败");
+
+                }
+
+            }
+
+        })
+
+    }
 	
 </script>
 
@@ -261,7 +351,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 	</div>
 	
 	<!-- 备注 -->
-	<div style="position: relative; top: 30px; left: 40px;">
+	<div id="remarkBody" style="position: relative; top: 30px; left: 40px;">
 		<div class="page-header">
 			<h4>备注</h4>
 		</div>
@@ -299,7 +389,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				<textarea id="remark" class="form-control" style="width: 850px; resize : none;" rows="2"  placeholder="添加备注..."></textarea>
 				<p id="cancelAndSaveBtn" style="position: relative;left: 737px; top: 10px; display: none;">
 					<button id="cancelBtn" type="button" class="btn btn-default">取消</button>
-					<button type="button" class="btn btn-primary">保存</button>
+					<button type="button" class="btn btn-primary" id="saveRemarkBtn">保存</button>
 				</p>
 			</form>
 		</div>
