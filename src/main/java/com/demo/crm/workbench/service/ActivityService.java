@@ -2,7 +2,9 @@ package com.demo.crm.workbench.service;
 
 import com.demo.crm.vo.PaginationVO;
 import com.demo.crm.workbench.domain.Activity;
+import com.demo.crm.workbench.domain.ActivityRemark;
 
+import java.util.List;
 import java.util.Map;
 
 public interface ActivityService {
@@ -17,4 +19,8 @@ public interface ActivityService {
     Map<String, Object> getUserListAndActivity(String id);
 
     boolean update(Activity activity);
+
+    Activity detail(String id);
+
+    List<ActivityRemark> getRemarkListByAid(String activityId);
 }

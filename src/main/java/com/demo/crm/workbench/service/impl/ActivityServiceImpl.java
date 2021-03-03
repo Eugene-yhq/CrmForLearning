@@ -8,6 +8,7 @@ import com.demo.crm.vo.PaginationVO;
 import com.demo.crm.workbench.dao.ActivityDao;
 import com.demo.crm.workbench.dao.ActivityRemarkDao;
 import com.demo.crm.workbench.domain.Activity;
+import com.demo.crm.workbench.domain.ActivityRemark;
 import com.demo.crm.workbench.service.ActivityService;
 
 import java.util.HashMap;
@@ -115,5 +116,21 @@ public class ActivityServiceImpl implements ActivityService {
         }
 
         return flag;
+    }
+
+    @Override
+    public Activity detail(String id) {
+
+        Activity activity = activityDao.detail(id);
+
+        return activity;
+    }
+
+    @Override
+    public List<ActivityRemark> getRemarkListByAid(String activityId) {
+
+        List<ActivityRemark> arList = activityRemarkDao.getRemarkListByAid(activityId);
+
+        return arList;
     }
 }

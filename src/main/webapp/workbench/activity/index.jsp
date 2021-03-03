@@ -64,6 +64,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 					$("#create-marketActivityOwner").html(html);
 
+					//这里的操作是将当前用户作为下拉框的默认显示
 					var id = "${user.id}";
 					$("#create-marketActivityOwner").val(id);
 
@@ -106,7 +107,17 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 							//添加成功后
 							//刷新市场活动信息列表
-                            pageList(1,3);
+                            //pageList(1,3);
+
+							/*
+							*
+							*$("#activityPage").bs_pagination('getOption', 'currentPage'):
+							* 		操作后停留在当前页
+							*$("#activityPage").bs_pagination('getOption', 'rowsPerPage')：
+							* 		操作后维持已经设置好的每页展现的记录数
+							*
+							* */
+							pageList(1,$("#activityPage").bs_pagination('getOption', 'rowsPerPage'));
 
 							//清空添加操作模态窗口中的数据
 
@@ -158,7 +169,10 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			$("#hidden-startDate").val($.trim($("#search-startTime").val()));
 			$("#hidden-endDate").val($.trim($("#search-endTime").val()));
 
-			pageList(1,3);
+			pageList($("#activityPage").bs_pagination('getOption', 'currentPage')
+					,$("#activityPage").bs_pagination('getOption', 'rowsPerPage'));
+
+
 
 		})
 
@@ -231,7 +245,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 							//需要后台返回结果为true/false
 							if(data.success){
 
-								pageList(1,2);
+								//pageList(1,2);
+								pageList(1,$("#activityPage").bs_pagination('getOption', 'rowsPerPage'));
 
 								alert("删除记录成功");
 
@@ -347,7 +362,9 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
                         //修改成功后
                         //刷新市场活动信息列表
-                        pageList(1,3);
+						//停留在当前页，维持展现页数
+                        pageList($("#activityPage").bs_pagination('getOption', 'currentPage')
+								,$("#activityPage").bs_pagination('getOption', 'rowsPerPage'));
 
                         //关闭修改操作的模态窗口
                         $("#editActivityModal").modal("hide");
@@ -412,7 +429,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 					html += '<tr class="active">';
 					html += '<td><input type="checkbox" name="xuanze" value="'+n.id+'"/></td>';
-					html += '<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href=\'workbench/activity/detail.jsp\';">'+n.name+'</a></td>';
+					html += '<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href=\'workbench/activity/detail.do?id='+n.id+'\';">'+n.name+'</a></td>';
 					html += '<td>'+n.owner+'</td>';
 					html += '<td>'+n.startDate+'</td>';
 					html += '<td>'+n.endDate+'</td>';

@@ -53,7 +53,45 @@ public class ActivityController extends HttpServlet {
 
             update(request,response);
 
+        }else if("/workbench/activity/detail.do".equals(path)){
+
+            detail(request,response);
+
+        }else if("/workbench/activity/getRemarkListByAid.do".equals(path)){
+
+            getRemarkListByAid(request,response);
+
         }
+
+    }
+
+    private void getRemarkListByAid(HttpServletRequest request, HttpServletResponse response) {
+
+        System.out.println("根据市场活动id，取得备注信息列表");
+
+        String activityId = request.getParameter("activityId");
+
+        ActivityService as = (ActivityService) ServiceFactory.getService(new ActivityServiceImpl());
+
+        List<ActivityRemark> arList = as.getRemarkListByAid(activityId);
+
+        PrintJson.printJsonObj(response, arList);
+
+    }
+
+    private void detail(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        System.out.println("进入到跳转到详细信息页的操作");
+
+        String id = request.getParameter("id");
+
+        ActivityService as = (ActivityService) ServiceFactory.getService(new ActivityServiceImpl());
+
+        Activity activity = as.detail(id);
+
+        request.setAttribute("activity",activity);
+
+        request.getRequestDispatcher("/workbench/activity/detail.jsp").forward(request, response);
 
     }
 
