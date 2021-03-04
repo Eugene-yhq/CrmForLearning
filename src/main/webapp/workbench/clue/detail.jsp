@@ -55,6 +55,54 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		//页面加载完毕后，取出关联的市场活动信息列表
 		showActivityList();
 
+		//为关联市场活动模态窗口中的搜索框绑定事件，通过触发回车键，查询并展现所需市场活动列表
+		$("#aname").keydown(function (event) {
+
+			if(event.keyCode==13){
+
+				//alert("查询并展现市场活动列表");
+
+				$.ajax({
+
+					url : "workbench/clue/getActivityListByNameAndNotByClueId.do",
+					data : {
+
+						"aname" : $.trim($("#aname").val()),
+						"clueId" : "${c.id}"
+
+					},
+					type : "get",
+					dataType : "json",
+					success : function (data) {
+
+						var html = "";
+
+						$.each(data,function (i,n) {
+
+							html += '<tr>';
+							html += '<td><input type="checkbox" name="xz" value="'+n.id+'"/></td>';
+							html += '<td>'+n.name+'</td>';
+							html += '<td>'+n.startDate+'</td>';
+							html += '<td>'+n.endDate+'</td>';
+							html += '<td>'+n.owner+'</td>';
+							html += '</tr>';
+
+						})
+
+						$("#activitySearchBody").html(html);
+
+					}
+
+				})
+
+				//展现完列表后，将模态窗口默认的回车行为禁用
+				return false;
+
+			}
+
+		})
+
+
 	});
 	
 	function showActivityList() {
@@ -97,6 +145,32 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 		//alert(id);
 
+		$.ajax({
+
+			url : "workbench/clue/unbund.do",
+			data : {
+
+				"id" : id
+
+			},
+			type : "post",
+			dataType : "json",
+			success : function (data) {
+
+				if(data.success){
+
+					showActivityList();
+
+				}else {
+
+					alert("解除关联失败");
+
+				}
+
+			}
+
+		})
+
 	}
 	
 </script>
@@ -118,7 +192,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					<div class="btn-group" style="position: relative; top: 18%; left: 8px;">
 						<form class="form-inline" role="form">
 						  <div class="form-group has-feedback">
-						    <input type="text" class="form-control" style="width: 300px;" placeholder="请输入市场活动名称，支持模糊查询">
+						    <input type="text" class="form-control" id="aname" style="width: 300px;" placeholder="请输入市场活动名称，支持模糊查询">
 						    <span class="glyphicon glyphicon-search form-control-feedback"></span>
 						  </div>
 						</form>
@@ -134,21 +208,21 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								<td></td>
 							</tr>
 						</thead>
-						<tbody>
-							<tr>
-								<td><input type="checkbox"/></td>
-								<td>发传单</td>
-								<td>2020-10-10</td>
-								<td>2020-10-20</td>
-								<td>zhangsan</td>
-							</tr>
-							<tr>
-								<td><input type="checkbox"/></td>
-								<td>发传单</td>
-								<td>2020-10-10</td>
-								<td>2020-10-20</td>
-								<td>zhangsan</td>
-							</tr>
+						<tbody id="activitySearchBody">
+<%--							<tr>--%>
+<%--								<td><input type="checkbox"/></td>--%>
+<%--								<td>发传单</td>--%>
+<%--								<td>2020-10-10</td>--%>
+<%--								<td>2020-10-20</td>--%>
+<%--								<td>zhangsan</td>--%>
+<%--							</tr>--%>
+<%--							<tr>--%>
+<%--								<td><input type="checkbox"/></td>--%>
+<%--								<td>发传单</td>--%>
+<%--								<td>2020-10-10</td>--%>
+<%--								<td>2020-10-20</td>--%>
+<%--								<td>zhangsan</td>--%>
+<%--							</tr>--%>
 						</tbody>
 					</table>
 				</div>
