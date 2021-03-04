@@ -33,7 +33,7 @@ public class ClueController extends HttpServlet {
 
         if ("/workbench/clue/getUserList.do".equals(path)) {
 
-            //getUserList(request, response);
+            getUserList(request, response);
 
         } else if ("/workbench/clue/save.do".equals(path)) {
 
@@ -41,6 +41,18 @@ public class ClueController extends HttpServlet {
 
         }
 
+
+    }
+
+    private void getUserList(HttpServletRequest request, HttpServletResponse response) {
+
+        System.out.println("取得用户信息列表");
+
+        UserService us = (UserService) ServiceFactory.getService(new UserServiceImpl());
+
+        List<User> uList = us.getUserList();
+
+        PrintJson.printJsonObj(response, uList);
 
     }
 }
