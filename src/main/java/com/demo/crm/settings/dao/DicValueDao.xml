@@ -11,6 +11,8 @@
 
         where typeCode=#{code}
 
+        order by orderNo
+
     </select>
 	
 </mapper>
