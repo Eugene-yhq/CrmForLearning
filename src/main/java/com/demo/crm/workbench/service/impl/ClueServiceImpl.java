@@ -182,7 +182,7 @@ public class ClueServiceImpl implements ClueService {
 //            int count3 = customerRemarkDao.save(customerRemark);
 //            if(count3!=1){
 //                flag = false;
-//            }
+            }
 
 
         return flag;
