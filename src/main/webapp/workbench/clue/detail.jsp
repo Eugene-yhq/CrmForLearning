@@ -102,6 +102,58 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 		})
 
+		$("#bundBtn").click(function () {
+
+			var $xz = $("input[name=xz]:checked");
+
+			if($xz.length==0){
+
+				alert("请选择需要关联的市场活动");
+
+			}else {
+
+				var param = "cid=${c.id}&";
+
+				for(var i=0;i<$xz.length;i++){
+
+					param += "aid="+$($xz[i]).val();
+
+					if(i<$xz.length-1){
+
+						param += "&";
+
+					}
+
+				}
+
+				$.ajax({
+
+					url : "workbench/clue/bund.do",
+					data : param,
+					type : "post",
+					dataType : "json",
+					success : function (data) {
+
+						if(data.success){
+
+							showActivityList();
+
+							$("#bundModal").modal("hide");
+
+						}else {
+
+							alert("关联市场活动失败");
+
+						}
+
+					}
+
+				})
+
+			}
+
+		})
+
 
 	});
 	
@@ -228,7 +280,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-					<button type="button" class="btn btn-primary" data-dismiss="modal">关联</button>
+					<button type="button" class="btn btn-primary" id="bundBtn">关联</button>
 				</div>
 			</div>
 		</div>
